@@ -5,3 +5,5 @@ appview*.db
 private_jwk.json
 .astro
 dist/
+result/*
+result
