@@ -14,6 +14,8 @@ in
 	inherit (package-json) version;
 	
     src = lib.snowfall.fs.get-file "./appview";
+    clientdir = lib.snowfall.fs.get-file "./client";
+    lexicondir = lib.snowfall.fs.get-file "./lexicons";
 
     npmDeps = importNpmLock {
     	npmRoot = lib.snowfall.fs.get-file "./appview";
@@ -29,12 +31,13 @@ in
 
     nativeBuildInputs = [makeWrapper];
 
-	# postUnpack = ''
-	# 	npx --offline lex gen-server $out/client/generated/server ../$sourceRoot/lexicons/**/*.json
-	# '';
+    preInstall = ''
+      cp -r $clientdir ./
+      cp -r $lexicondir ./
+      npx --offline lex gen-server $out/lib/node_modules/guestbook-appview/client/generated/server $out/lib/node_modules/guestbook-appview/lexicons
+    '';
 
     postInstall = ''
-      npx --offline lex gen-server $out/client/generated/server ../$sourceRoot/lexicons/**/*.json blah
       makeWrapper ${nodejs_22}/bin/node $out/bin/guestbook-appview --add-flags $out/lib/node_modules/guestbook-appview/node_modules/.bin/tsx --add-flags watch --add-flags "--env-file=.env" --add-flags $out/lib/node_modules/guestbook-appview/index.ts
     '';
   }
