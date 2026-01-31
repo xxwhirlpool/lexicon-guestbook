@@ -1,8 +1,10 @@
 import { eq, and } from "drizzle-orm";
+
 import {
   type Record as Book,
   isRecord as isBook,
-} from "../../client/generated/api/types/com/fujocoded/guestbook/book.js";
+ } from "../../client/generated/api/types/com/fujocoded/guestbook/book.js";
+
 import { db } from "../db/index.js";
 import { guestbooks, users, blockedUsers } from "../db/schema.js";
 import { resolveBskyUserProfiles, createOrGetUser } from "./user.js";

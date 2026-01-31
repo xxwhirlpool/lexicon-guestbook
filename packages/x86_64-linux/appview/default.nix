@@ -32,14 +32,13 @@ in
     nativeBuildInputs = [makeWrapper];
 
     preBuild = ''
-      npx --offline lex gen-server ./client/generated/server ./lexicons
       cp -r --no-preserve=mode ${lib.snowfall.fs.get-file "./client"} ./client
       cp -r --no-preserve=mode ${lib.snowfall.fs.get-file "./lexicons"} ./lexicons
+      npx --offline lex gen-server --yes ./client/generated/server ./lexicons || echo "lex failed with $?"
     '';
 
     postInstall = ''
-      cp -r ./client $out/lib/node_modules/guestbook-appview/
-      cp -r ./lexicons $out/lib/node_modules/guestbook-appview/
+      # cp -r --no-preserve=mode ./client $out/lib/node_modules/guestbook-appview/client
       makeWrapper ${nodejs_22}/bin/node $out/bin/guestbook-appview --add-flags $out/lib/node_modules/guestbook-appview/node_modules/.bin/tsx --add-flags watch --add-flags "--env-file=.env" --add-flags $out/lib/node_modules/guestbook-appview/index.ts
     '';
   }

@@ -1,8 +1,26 @@
 import express from "express";
-import { createServer } from "../client/generated/server/index.js";
+
+
+// import { createServer } from "../client/generated/server/index.js";
+
+try {
+	const createServer = await import("../client/generated/server/index.js");
+} catch (error) {
+	const createServer = await import("./client/generated/server/index.js");
+};
+
 import { getGuestbook, getGuestbooksByUser } from "./lib/book.js";
 import { getSubmissionByGuestbook } from "./lib/submission.js";
-import { OutputSchema as GuestbookOutput } from "../client/generated/server/types/com/fujocoded/guestbook/getGuestbooks.js";
+
+
+// import { OutputSchema as GuestbookOutput } from "../client/generated/server/types/com/fujocoded/guestbook/getGuestbooks.js";
+
+try {
+	const GuestbookOutput = await import("../client/generated/server/types/com/fujocoded/guestbook/getGuestbooks.js");
+} catch (error) {
+	const GuestbookOutput = await import("./client/generated/server/types/com/fujocoded/guestbook/getGuestbooks.js");
+};
+
 import { readFileSync } from "node:fs";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
